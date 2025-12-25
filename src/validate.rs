@@ -1,0 +1,1 @@
+// TODO: implement validation for postgres connection string and for SQL query

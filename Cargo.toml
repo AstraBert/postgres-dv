@@ -1,10 +1,11 @@
 [package]
-name = "pgconsole"
+name = "postgres-dv"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 clap = { version = "4.5.53", features = ["derive"] }
 richrs = "0.2.1"
-sqlx = { version = "0.8.6", features = ["runtime-tokio", "postgres", "tls-native-tls"] }
+sqlx = { version = "0.7", features = ["runtime-tokio", "postgres", "tls-native-tls"] }
+sqlx-pgrow-serde = { version = "0.2.0", features = ["postgres", "json", "chrono"] }
 tokio = { version = "1.48.0", features = ["full"] }
