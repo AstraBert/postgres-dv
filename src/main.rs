@@ -1,7 +1,10 @@
 mod dbops;
+mod validate;
 
 use crate::dbops::console;
+use crate::validate::{is_valid_postgres_connection_string};
 use clap::Parser;
+use richrs::prelude::Console;
 
 /// Postgres data viewer, a simple console
 /// to have a rich view of data from a 
@@ -20,6 +23,11 @@ struct Args {
 
 #[tokio::main]
 async fn main() {
+    let mut termui = Console::new();
     let args = Args::parse();
-    console(&args.uri, args.connections).await;
+    if is_valid_postgres_connection_string(&args.uri) {
+        console(&args.uri, args.connections).await;
+    } else {
+        let _ = termui.print("[bold red]ERROR: the connection string you provided is not valid.[/]\nPlease retry with a new one");
+    }
 }
