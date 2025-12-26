@@ -2,11 +2,16 @@
 name = "postgres-dv"
 version = "0.1.0"
 edition = "2024"
+license-file = "LICENSE"
+readme = "README.md"
+repository = "https://github.com/AstraBert/postgres-dv"
+description = "Postgres Data Viewer with powerful CLI and rich data visualization."
+keywords = ["postgres", "sql", "data-visualization"]
 
 [dependencies]
 clap = { version = "4.5.53", features = ["derive"] }
 regex = "1.12.2"
-richrs = "0.2.1"
+richrs = {version = "0.2.1", features = ["markdown"]}
 sqlx = { version = "0.7", features = ["runtime-tokio", "postgres", "tls-native-tls"] }
 sqlx-pgrow-serde = { version = "0.2.0", features = ["postgres", "json", "chrono"] }
 tokio = { version = "1.48.0", features = ["full"] }
