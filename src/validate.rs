@@ -11,7 +11,7 @@ pub fn is_valid_postgres_connection_string(connection_string: &str) -> bool {
     let re = Regex::new(r#"^postgres(?:ql)?://[^:]+:[^@]+@[^/]+/[^?]+(?:\?.*)?$"#)
         .expect("Regex should compile, but an error occurred");
     let sanitized_string = connection_string.trim();
-    re.is_match(&sanitized_string)
+    re.is_match(sanitized_string)
 }
 
 #[cfg(test)]

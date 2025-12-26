@@ -23,7 +23,7 @@ async fn execute_query(pool: &Pool<Postgres>, query: &str, console: &mut Console
     let rows = sqlx::query(query).fetch_all(pool).await.expect(
         "Unable to execute query, please check the syntax and the connection and try again.",
     );
-    if rows.len() > 0 {
+    if !rows.is_empty() {
         let mut table = Table::new();
         let headers = read_header(&rows[0]);
         for header in headers {
@@ -49,41 +49,37 @@ pub async fn console(conn_string: &str, max_conns: u32) {
     match health_check(&pool).await {
         Ok(()) => {}
         Err(e) => {
-            let _ = console.print(&format!("[bold red]ERROR: {} [/]", e.to_string()));
+            let _ = console.print(&format!("[bold red]ERROR: {} [/]", e));
         }
     }
     loop {
         let answer = console
             .input("[bold cyan]Your query:[/] ")
             .expect("Should be able to take input from console");
-        if vec![
-            "q".to_string(),
+        if ["q".to_string(),
             "quit".to_string(),
             "e".to_string(),
-            "exit".to_string(),
-        ]
+            "exit".to_string()]
         .contains(&answer)
         {
             break;
-        } else if vec!["c".to_string(), "clear".to_string()].contains(&answer) {
+        } else if ["c".to_string(), "clear".to_string()].contains(&answer) {
             let _ = console.clear();
-        } else {
-            if is_valid_select_query(&answer) {
-                if answer.contains("SELECT *") {
-                    let proceed = console.input("[bold yellow]Are you sure you want to select all columns from the table?[/] (yes/no) ").expect("You should be able to confirm");
-                    if vec!["yes".to_string(), "y".to_string(), "yse".to_string()]
-                        .contains(&proceed.to_lowercase())
-                    {
-                        execute_query(&pool, &answer, &mut console).await;
-                    } else {
-                        continue;
-                    }
-                } else {
+        } else if is_valid_select_query(&answer) {
+            if answer.contains("SELECT *") {
+                let proceed = console.input("[bold yellow]Are you sure you want to select all columns from the table?[/] (yes/no) ").expect("You should be able to confirm");
+                if ["yes".to_string(), "y".to_string(), "yse".to_string()]
+                    .contains(&proceed.to_lowercase())
+                {
                     execute_query(&pool, &answer, &mut console).await;
+                } else {
+                    continue;
                 }
             } else {
-                let _ = console.print("[bold red]ERROR: The query you passed is not a valid SELECT query for Postgres[/]\nPlease try with a different one.");
+                execute_query(&pool, &answer, &mut console).await;
             }
+        } else {
+            let _ = console.print("[bold red]ERROR: The query you passed is not a valid SELECT query for Postgres[/]\nPlease try with a different one.");
         }
     }
 }
