@@ -56,10 +56,12 @@ pub async fn console(conn_string: &str, max_conns: u32) {
         let answer = console
             .input("[bold cyan]Your query:[/] ")
             .expect("Should be able to take input from console");
-        if ["q".to_string(),
+        if [
+            "q".to_string(),
             "quit".to_string(),
             "e".to_string(),
-            "exit".to_string()]
+            "exit".to_string(),
+        ]
         .contains(&answer)
         {
             break;
