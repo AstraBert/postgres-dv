@@ -1,6 +1,6 @@
 {
   "name": "@cle-does-things/postgres-dv",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Postgres Data Viewer with powerful CLI and rich data visualization.",
   "main": "start.js",
   "directories": {
@@ -27,6 +27,9 @@
     "uninstall.js",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
     
