@@ -1,0 +1,32 @@
+{
+  "name": "postgres-dv",
+  "version": "0.1.0",
+  "description": "Postgres Data Viewer with powerful CLI and rich data visualization.",
+  "main": "start.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node ./pre-install.js",
+    "uninstall": "node ./uninstall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AstraBert/postgres-dv.git"
+  },
+  "keywords": ["postgres","sql","data-visualization"],
+  
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AstraBert/postgres-dv/issues"
+  },
+  "files": [
+    "pre-install.js",
+    "start.js",
+    "uninstall.js",
+    "README.md",
+    "LICENSE"
+  ]
+}
+    

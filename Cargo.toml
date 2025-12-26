@@ -2,6 +2,11 @@
 name = "postgres-dv"
 version = "0.1.0"
 edition = "2024"
+license-file = "LICENSE"
+readme = "README.md"
+repository = "https://github.com/AstraBert/postgres-dv"
+description = "Postgres Data Viewer with powerful CLI and rich data visualization."
+keywords = ["postgres", "sql", "data-visualization"]
 
 [dependencies]
 clap = { version = "4.5.53", features = ["derive"] }
