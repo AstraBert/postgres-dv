@@ -6,7 +6,7 @@ edition = "2024"
 [dependencies]
 clap = { version = "4.5.53", features = ["derive"] }
 regex = "1.12.2"
-richrs = "0.2.1"
+richrs = {version = "0.2.1", features = ["markdown"]}
 sqlx = { version = "0.7", features = ["runtime-tokio", "postgres", "tls-native-tls"] }
 sqlx-pgrow-serde = { version = "0.2.0", features = ["postgres", "json", "chrono"] }
 tokio = { version = "1.48.0", features = ["full"] }
