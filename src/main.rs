@@ -57,13 +57,13 @@ async fn main() {
     let mut termui = Console::new();
     let args = Args::parse();
     let connection_string: String;
-    if args.uri != "" {
+    if !args.uri.is_empty() {
         connection_string = args.uri;
     } else if args.stdin {
         connection_string = match prompt_password("You Postgres connection string: ") {
             Ok(s) => s.trim().to_string(),
             Err(e) => {
-                let _ = termui.print(&format!("[bold red]ERROR: {}", e.to_string()));
+                let _ = termui.print(&format!("[bold red]ERROR: {}", e));
                 return;
             }
         };
