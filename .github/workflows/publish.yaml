@@ -50,7 +50,7 @@ jobs:
             CARGO_API_TOKEN: ${{ secrets.CARGO_API_TOKEN }}
 
       - name: Publish to crates
-        run: cargo publish --token $CARGO_API_TOKEN
+        run: cargo publish
         env:
           CARGO_API_TOKEN: ${{ secrets.CARGO_API_TOKEN }}
 
