@@ -22,3 +22,7 @@ format:
 format-check:
 	$(info ****************** running rustfmt in check mode ******************)
 	cargo fmt --check
+
+version-bump:
+	$(info ****************** bumping version in package.json and Cargo.toml ******************)
+	python3 scripts/version_bump.py

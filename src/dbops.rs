@@ -26,6 +26,7 @@ async fn execute_query(pool: &Pool<Postgres>, query: &str, console: &mut Console
     if !rows.is_empty() {
         let mut table = Table::new();
         let headers = read_header(&rows[0]);
+        let max_width = (console.width() / headers.len()) - 1;
         for header in headers {
             table.add_column(Column::new(header));
         }
@@ -33,12 +34,14 @@ async fn execute_query(pool: &Pool<Postgres>, query: &str, console: &mut Console
             let mut row_vals: Vec<String> = vec![];
             let row_values = read_row(&row);
             for value in row_values {
-                row_vals.push(value.to_string());
+                let mut new_value = value.to_string();
+                new_value.truncate(max_width);
+                row_vals.push(new_value);
             }
             table.add_row_cells(row_vals);
         }
         console
-            .write_segments(&table.render(100000))
+            .write_segments(&table.render(console.width()))
             .expect("Console should be able to render the table");
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@cle-does-things/postgres-dv",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Postgres Data Viewer with powerful CLI and rich data visualization.",
   "main": "start.js",
   "directories": {
@@ -15,8 +15,11 @@
     "type": "git",
     "url": "https://github.com/AstraBert/postgres-dv.git"
   },
-  "keywords": ["postgres","sql","data-visualization"],
-  
+  "keywords": [
+    "postgres",
+    "sql",
+    "data-visualization"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AstraBert/postgres-dv/issues"
@@ -32,4 +35,3 @@
     "access": "public"
   }
 }
-    
