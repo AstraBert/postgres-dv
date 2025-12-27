@@ -17,6 +17,7 @@ Welcome to **Postgres Data Viewer**, a simple-yet-powerful console for visualizi
 
 Here are a few tips:
 
+- Database health has already been tested with `SELECT 1`
 - You can only use `SELECT` queries and they must end with a semicolon
 - You can exit the console by typing `e`, `exit`, `q` or `quit`
 - You can clear the console by typing `c` or `clear`
@@ -35,7 +36,7 @@ _  .___/\____//____/ \__/ _\__, / /_/    \___//____/        \__,_/  _____/
 /// to have a rich view of data from a
 /// remote or local Postgres database
 #[derive(Parser, Debug)]
-#[command(version = "0.1.1")]
+#[command(version = "0.1.3")]
 #[command(name = "postgres-dv")]
 #[command(about, long_about = None)]
 struct Args {

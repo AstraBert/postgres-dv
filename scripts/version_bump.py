@@ -66,6 +66,24 @@ def new_version_to_toml(content: str, new_version: str) -> None:
     with open("Cargo.toml", "w") as f:
         f.write(content)
 
+def new_version_to_pre_install_js(old_version: str, new_version: str) -> None:
+    with open("pre-install.js", "r") as f:
+        content = f.read()
+    old_v_log = f"Installing and compiling postgres-dv {old_version}"
+    old_v_install = f"cargo install postgres-dv --vers {old_version}"
+    new_v_log = f"Installing and compiling postgres-dv {new_version}"
+    new_v_install = f"cargo install postgres-dv --vers {new_version}"
+    content = content.replace(old_v_log, new_v_log).replace(old_v_install, new_v_install)
+    with open("pre-install.js", "w") as f:
+        f.write(content)
+
+def new_command_version_main_rs(old_version: str, new_version: str) -> None:
+    with open("src/main.rs", "r") as f:
+        content = f.read()
+    content = content.replace(f"#[command(version = \"{old_version}\")]", f"#[command(version = \"{new_version}\")]")
+    with open("src/main.rs", "w") as f:
+        f.write(content)
+
 def main() -> None:
     v_rust, toml_content = load_version_from_toml()
     v_js, json_data = load_version_from_json()
@@ -83,6 +101,8 @@ def main() -> None:
             new_ver = bump_semver(semv_rust, bump_type) # type: ignore
             new_version_to_json(json_data, new_ver)
             new_version_to_toml(toml_content, new_ver)
+            new_version_to_pre_install_js(v_rust, new_ver)
+            new_command_version_main_rs(v_rust, new_ver)
             break
     sys.exit(0)
 
