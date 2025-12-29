@@ -2,6 +2,7 @@ use crate::validate::is_valid_select_query;
 use richrs::prelude::{Column, Console, Table};
 use sqlx::{Pool, Postgres, postgres::PgPoolOptions};
 use sqlx_pgrow_serde::{read_header, read_row};
+use tokio::time;
 
 async fn connect(conn_string: &str, max_conns: u32) -> Pool<Postgres> {
     PgPoolOptions::new()
@@ -9,20 +10,24 @@ async fn connect(conn_string: &str, max_conns: u32) -> Pool<Postgres> {
     connect(conn_string).await.expect("Unable to connect to the specified Postgres database, please check the connection string and the maximum allowed connections and try again.")
 }
 
-async fn health_check(pool: &Pool<Postgres>) -> Result<(), sqlx::Error> {
+async fn health_check(pool: &Pool<Postgres>) -> Result<u128, sqlx::Error> {
+    let now = time::Instant::now();
     let row: (i64,) = sqlx::query_as("SELECT $1")
         .bind(1_i64)
         .fetch_one(pool)
         .await?;
+    let elapsed = now.elapsed().as_millis();
 
     assert_eq!(row.0, 1);
-    Ok(())
+    Ok(elapsed)
 }
 
 async fn execute_query(pool: &Pool<Postgres>, query: &str, console: &mut Console) {
+    let now = time::Instant::now();
     let rows = sqlx::query(query).fetch_all(pool).await.expect(
         "Unable to execute query, please check the syntax and the connection and try again.",
     );
+    let elapsed = now.elapsed().as_millis();
     if !rows.is_empty() {
         let mut table = Table::new();
         let headers = read_header(&rows[0]);
@@ -43,6 +48,9 @@ async fn execute_query(pool: &Pool<Postgres>, query: &str, console: &mut Console
         console
             .write_segments(&table.render(console.width()))
             .expect("Console should be able to render the table");
+        console
+            .print(&format!("Query executed in {:?} milliseconds", elapsed))
+            .expect("Console should print");
     }
 }
 
@@ -50,9 +58,16 @@ pub async fn console(conn_string: &str, max_conns: u32) {
     let mut console = Console::new();
     let pool = connect(conn_string, max_conns).await;
     match health_check(&pool).await {
-        Ok(()) => {}
+        Ok(t) => {
+            let _ = console.print(&format!(
+                "[bold]Database Status:[/] [bold green]HEALTHY[/] ({:?} ms)",
+                t
+            ));
+            println!();
+        }
         Err(e) => {
             let _ = console.print(&format!("[bold red]ERROR: {} [/]", e));
+            return;
         }
     }
     loop {
@@ -136,7 +151,11 @@ mod test {
                 .expect("Connection string should be defined");
             let pool = connect(&conn_string, 1).await;
             match health_check(&pool).await {
-                Ok(_) => {}
+                Ok(t) => {
+                    // basic check that tests that db health check takes more
+                    // than 0 milliseconds and less than a minute
+                    assert!(t > 0 && t < 60000);
+                }
                 Err(e) => {
                     eprintln!(
                         "An error occurred while checking the health: {}",
