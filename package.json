@@ -1,6 +1,6 @@
 {
   "name": "@cle-does-things/postgres-dv",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Postgres Data Viewer with powerful CLI and rich data visualization.",
   "main": "start.js",
   "directories": {
