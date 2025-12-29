@@ -36,7 +36,7 @@ _  .___/\____//____/ \__/ _\__, / /_/    \___//____/        \__,_/  _____/
 /// to have a rich view of data from a
 /// remote or local Postgres database
 #[derive(Parser, Debug)]
-#[command(version = "0.1.3")]
+#[command(version = "0.1.4")]
 #[command(name = "postgres-dv")]
 #[command(about, long_about = None)]
 struct Args {
